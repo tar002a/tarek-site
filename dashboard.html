@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Operations Intelligence — Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#070b14;color:#e8ecf4;overflow-x:hidden}
+#bg{position:fixed;inset:0;z-index:0;opacity:.5}
+.nav{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 5vw;background:rgba(7,11,20,.75);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{font-weight:700;background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav .live{display:flex;align-items:center;gap:8px;color:#4ade80;font-size:.85rem}
+.dot{width:9px;height:9px;border-radius:50%;background:#4ade80;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.6)}50%{box-shadow:0 0 0 7px rgba(74,222,128,0)}}
+main{position:relative;z-index:2;padding:40px 5vw 80px;max-width:1200px;margin:auto}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);margin:26px 0 6px}
+.date{color:#64748b;margin-bottom:30px}
+/* KPI cards */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px}
+.kpi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;text-align:center;transition:.3s}
+.kpi:hover{transform:translateY(-5px);border-color:rgba(56,189,248,.45)}
+.kpi b{font-size:2.2rem;display:block;background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kpi span{color:#94a3b8;font-size:.85rem}
+/* Tabs */
+.tabs{display:flex;gap:10px;margin:44px 0 22px;flex-wrap:wrap}
+.tab{padding:11px 26px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#94a3b8;cursor:pointer;font-family:inherit;font-size:.95rem;transition:.3s}
+.tab:hover{border-color:#38bdf8;color:#38bdf8}
+.tab.on{background:linear-gradient(90deg,#38bdf8,#a78bfa);color:#070b14;font-weight:700;border-color:transparent}
+.panel{display:none;animation:fadeUp .5s both}
+.panel.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th{background:rgba(56,189,248,.1);color:#7dd3fc;text-align:right;padding:13px 14px;border-bottom:1px solid rgba(56,189,248,.25);white-space:nowrap}
+td{padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top;line-height:1.65}
+tbody tr{transition:.25s}
+tbody tr:hover{background:rgba(56,189,248,.05)}
+.badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:700}
+.b-high{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.35)}
+.b-med{background:rgba(250,204,21,.13);color:#facc15;border:1px solid rgba(250,204,21,.3)}
+.b-low{background:rgba(74,222,128,.13);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
+.b-info{background:rgba(125,211,252,.12);color:#7dd3fc;border:1px solid rgba(125,211,252,.3)}
+.conf{font-weight:700;color:#a78bfa}
+a.link{position:relative;color:#7dd3fc;text-decoration:none;padding-bottom:2px;transition:.3s}
+a.link::after{content:'';position:absolute;bottom:0;right:0;width:100%;height:2px;border-radius:2px;background:linear-gradient(90deg,#38bdf8,#a78bfa);transform:scaleX(.3);transform-origin:right;transition:.35s}
+a.link:hover::after{transform:scaleX(1)}
+a.link:hover{text-shadow:0 0 14px rgba(56,189,248,.5)}
+/* Brief sections */
+.brief h2{margin:34px 0 10px;font-size:1.25rem;color:#7dd3fc}
+.brief p,.brief li{color:#c3cbdb;line-height:1.9;font-size:.97rem}
+.brief ul{padding-right:22px}
+.callout{background:rgba(248,113,113,.07);border-right:3px solid #f87171;border-radius:10px;padding:16px 18px;margin:14px 0}
+.callout.ok{background:rgba(74,222,128,.06);border-color:#4ade80}
+footer{z-index:2;position:relative;text-align:center;padding:30px;color:#475569;font-size:.85rem;border-top:1px solid rgba(255,255,255,.06)}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<nav class="nav"><div class="logo">EXEC INTELLIGENCE · T.KAYYALI</div><div class="live"><span class="dot"></span>LIVE · Aug 2026</div></nav>
+
+<main>
+<h1>Executive Operations <span style="background:linear-gradient(90deg,#38bdf8,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent">Intelligence</span></h1>
+<p class="date">صورة موحدة: Drive · Gmail · Calendar · GitHub · Web — مبنية بالأدلة، 23 أغسطس 2026</p>
+
+<div class="kpis">
+<div class="kpi reveal"><b data-n="60">0</b><span>ملف Drive فُحص</span></div>
+<div class="kpi reveal"><b data-n="65">0</b><span>رسالة Gmail فُحصت</span></div>
+<div class="kpi reveal"><b data-n="0">0</b><span>أحداث Calendar (فجوة)</span></div>
+<div class="kpi reveal"><b data-n="121">0</b><span>commit منذ 1 أغسطس</span></div>
+<div class="kpi reveal"><b data-n="10">0</b><span>أولويات مرتبة</span></div>
+</div>
+
+<div class="tabs">
+<button class="tab on" data-p="p1">🚦 الأولويات</button>
+<button class="tab" data-p="p2">🔍 الأدلة</button>
+<button class="tab" data-p="p3">📁 المشاريع</button>
+<button class="tab" data-p="p4">🔁 المتابعات</button>
+<button class="tab" data-p="p5">📄 التقرير التنفيذي</button>
+</div>
+
+<!-- Priorities -->
+<div id="p1" class="panel on">
+<table><thead><tr><th>#</th><th>الموضوع</th><th>التأثير</th><th>العجلة</th><th>الخطر</th><th>الثقة</th><th>الإجراء المقترح</th><th>الحد</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>كلمات مرور hardcoded في install.py — فرع إصلاح جاهز محليًا</td><td><span class="badge b-high">عالي</span></td><td><span class="badge b-high">عالي</span></td><td><span class="badge b-high">عالي</span></td><td class="conf">98%</td><td>مراجعة diff ثم push + تدوير كلمات مرور الإنتاج</td><td>25 Aug</td></tr>
+<tr><td>2</td><td>طلبا مشاركة Drive بلا رد (Bader Hamad «ضروري» + FriendCars)</td><td><span class="badge b-med">متوسط</span></td><td><span class="badge b-high">عالي</span></td><td><span class="badge b-med">متوسط</span></td><td class="conf">95%</td><td>قبول/رفض صريح للطلبين</td><td>26 Aug</td></tr>
+<tr><td>3</td><td>FIND-001: فواتير villas مايو–يونيو قد لا تكون أُرسلت فعليًا</td><td><span class="badge b-high">عالي</span></td><td><span class="badge b-high">عالي</span></td><td><span class="badge b-high">عالي</span></td><td class="conf">85%</td><td>تحقق من المرفقات قبل أي resend</td><td>27 Aug</td></tr>
+<tr><td>4</td><td>إغلاق حساب AWS مؤكد 13 Aug — تدقيق ما كان مستضافًا</td><td><span class="badge b-high">عالي</span></td><td><span class="badge b-high">عالي</span></td><td><span class="badge b-med">متوسط</span></td><td class="conf">90%</td><td>مراجعة الترحيل إلى Frappe Cloud</td><td>24 Aug</td></tr>
+<tr><td>5</td><td>GitHub issue #2: cash receipt preview dialog</td><td><span class="badge b-low">منخفض</span></td><td><span class="badge b-med">متوسط</span></td><td><span class="badge b-low">منخفض</span></td><td class="conf">90%</td><td>اختبار فرع agent/cash-receipt-preview وإغلاق issue</td><td>5 Sep</td></tr>
+<tr><td>6</td><td>ملفات POB مكررة (xlsx+pdf بنفس اليوم)</td><td><span class="badge b-low">منخفض</span></td><td><span class="badge b-low">منخفض</span></td><td><span class="badge b-med">متوسط</span></td><td class="conf">70%</td><td>نسخة canonical لكل يوم</td><td>30 Aug</td></tr>
+<tr><td>7</td><td>ملف leave tracker باسم Conflict</td><td><span class="badge b-med">متوسط</span></td><td><span class="badge b-med">متوسط</span></td><td><span class="badge b-med">متوسط</span></td><td class="conf">75%</td><td>حل التعارض والتأكد من سلامة السجلات</td><td>28 Aug</td></tr>
+<tr><td>8</td><td>ضجيج ملخصات AI اليومية في البريد</td><td><span class="badge b-low">منخفض</span></td><td><span class="badge b-low">منخفض</span></td><td><span class="badge b-low">منخفض</span></td><td class="conf">95%</td><td>فلتر/label أو cron ملخص</td><td>29 Aug</td></tr>
+<tr><td>9</td><td>ERPNext v16 stable — التطبيق يستهدفه بشكل صحيح</td><td><span class="badge b-info">معلومة</span></td><td><span class="badge b-low">منخفض</span></td><td><span class="badge b-low">منخفض</span></td><td class="conf">88%</td><td>متابعة patches شهريًا</td><td>شهري</td></tr>
+<tr><td>10</td><td>Frappe Cloud من $20/mo — تحقق ملاءمة الخطة</td><td><span class="badge b-info">معلومة</span></td><td><span class="badge b-low">منخفض</span></td><td><span class="badge b-low">منخفض</span></td><td class="conf">80%</td><td>مراجعة مقاييس الموقع في bench</td><td>15 Sep</td></tr>
+</tbody></table>
+</div>
+
+<!-- Evidence -->
+<div id="p2" class="panel">
+<table><thead><tr><th>المصدر</th><th>النوع</th><th>التاريخ</th><th>الجهة</th><th>النتيجة</th><th>الثقة</th></tr></thead>
+<tbody>
+<tr><td><a class="link" href="https://github.com/tar002a/danss_finance_ag_cloud/blob/main/danss_finance_ag/setup/install.py" target="_blank">install.py L777–801</a></td><td>كود GitHub</td><td>18 Aug</td><td>danss_finance_ag</td><td>4 كلمات مرور seed مثبتة في الكود</td><td class="conf">98%</td></tr>
+<tr><td>Gmail 1a0194fe43a87e0a</td><td>بريد</td><td>19 Aug</td><td>Bader Hamad / نظام التخاويل</td><td>طلب وصول writer موسوم «ضروري» بلا رد</td><td class="conf">98%</td></tr>
+<tr><td>Gmail 19fc80bbe1e69eb3</td><td>بريد</td><td>3 Aug</td><td>FriendCars Karbalaa</td><td>طلب وصول Payroll بلا رد منذ 20 يومًا</td><td class="conf">95%</td></tr>
+<tr><td>Finance Invoice Register (Drive)</td><td>جدول</td><td>22 Aug</td><td>Kent Soma City villas</td><td>FIND-001: مرفقات بريد 20 Aug لا تطابق النص</td><td class="conf">85%</td></tr>
+<tr><td>بريد AWS</td><td>بريد</td><td>13 Aug</td><td>AWS</td><td>تأكيد إغلاق الحساب</td><td class="conf">90%</td></tr>
+<tr><td>Calendar API</td><td>تقويم</td><td>75 يومًا مفحوصة</td><td>—</td><td>صفر أحداث — فجوة نظامية</td><td class="conf">100%</td></tr>
+<tr><td><a class="link" href="https://discuss.frappe.io/t/erp-v16-clarifications/158512" target="_blank">Frappe Forum</a> + <a class="link" href="https://frappe.io/erpnext/version-16" target="_blank">frappe.io</a></td><td>بحث خارجي</td><td>23 Aug</td><td>ERPNext v16</td><td>Stable أُصدر 12 Jan 2026؛ v16 خط إنتاج سليم</td><td class="conf">88%</td></tr>
+<tr><td><a class="link" href="https://frappe.io/cloud/pricing" target="_blank">frappe.io/cloud/pricing</a></td><td>بحث خارجي</td><td>23 Aug</td><td>Frappe Cloud</td><td>$20/mo مشترك، $125/mo dedicated (vendor claim)</td><td class="conf">80%</td></tr>
+</tbody></table>
+</div>
+
+<!-- Projects -->
+<div id="p3" class="panel">
+<table><thead><tr><th>المشروع</th><th>الحالة</th><th>آخر نشاط</th><th>المخاطر</th><th>الخطوة القادمة</th><th>GitHub</th></tr></thead>
+<tbody>
+<tr><td>DANSS Finance AG (v16 / Frappe Cloud)</td><td><span class="badge b-low">نشط جدًا</span></td><td>20 Aug</td><td>seed passwords؛ issue #2</td><td>دفع الإصلاح الأمني بعد الموافقة</td><td><a class="link" href="https://github.com/tar002a/danss_finance_ag_cloud" target="_blank">repo</a></td></tr>
+<tr><td>عمليات DANSS الميدانية (تخاويل/POB/تايم شيت)</td><td><span class="badge b-low">تشغيل يومي</span></td><td>22 Aug</td><td>ملفات مكررة؛ leave conflict</td><td>هيكلة مجلدات canonical</td><td>—</td></tr>
+<tr><td>FriendCars payroll automation</td><td><span class="badge b-med">بانتظار قرار</span></td><td>3 Aug</td><td>محجوب على الموافقة</td><td>قبول/رفض الوصول</td><td>—</td></tr>
+<tr><td>Kent Soma City villa collections</td><td><span class="badge b-high">تحت التحقيق</span></td><td>20 Aug</td><td>تأخر تحصيل إن غابت المرفقات</td><td>التحقق من بريد 20 Aug</td><td>—</td></tr>
+<tr><td>Portfolio + Dashboard sites</td><td><span class="badge b-low">منشور</span></td><td>23 Aug</td><td>لا شيء</td><td>تحديثات محتوى اختيارية</td><td><a class="link" href="https://github.com/tar002a/tarek-site" target="_blank">tarek-site</a></td></tr>
+</tbody></table>
+</div>
+
+<!-- Follow-ups -->
+<div id="p4" class="panel">
+<table><thead><tr><th>الإجراء</th><th>السبب</th><th>المالك</th><th>الاستحقاق</th><th>الحالة</th></tr></thead>
+<tbody>
+<tr><td>تدوير 4 كلمات مرور + دفع الإصلاح الأمني</td><td>كلمات مكشوفة في git history</td><td>Tarek</td><td>25 Aug</td><td><span class="badge b-med">بانتظار موافقة</span></td></tr>
+<tr><td>الرد على Bader Hamad</td><td>طلب ضروري عالق 4+ أيام</td><td>Tarek</td><td>24 Aug</td><td><span class="badge b-high">متأخر</span></td></tr>
+<tr><td>الرد على FriendCars</td><td>عالق 20 يومًا</td><td>Tarek</td><td>26 Aug</td><td><span class="badge b-high">متأخر</span></td></tr>
+<tr><td>التحقق من مرفقات villas</td><td>FIND-001 خطر تحصيل</td><td>Finance</td><td>27 Aug</td><td><span class="badge b-med">قيد الفحص</span></td></tr>
+<tr><td>تدقيق ما بعد AWS</td><td>إغلاق مؤكد</td><td>Tarek</td><td>24 Aug</td><td><span class="badge b-high">لم يبدأ</span></td></tr>
+<tr><td>حل تعارض leave tracker</td><td>سلامة بيانات HR</td><td>مساعد تنفيذي</td><td>28 Aug</td><td><span class="badge b-info">مجدول</span></td></tr>
+</tbody></table>
+</div>
+
+<!-- Brief -->
+<div id="p5" class="panel brief">
+<div class="callout ok"><strong>الخلاصة:</strong> عمليات DANSS الميدانية تعمل وتوثّق جيدًا في Drive. المشروع البرمجي الرئيسي نشط جدًا (121 commit) على ERPNext v16 / Frappe Cloud. التقويم فارغ تمامًا — كل الالتزامات تعيش في البريد والملفات فقط.</div>
+
+<h2>⚠️ أكبر المخاطر</h2>
+<ul>
+<li><strong>أمني:</strong> كلمات المرور المكشوفة تبقى في git history حتى بعد الإصلاح — تحتاج تدويرًا على الإنتاج (ثقة 95%).</li>
+<li><strong>مالي:</strong> تأخر تحصيل villa invoices إذا لم تكن المرفقات أُرسلت (ثقة 85%).</li>
+<li><strong>تشغيلي:</strong> ملف HR باسم Conflict ونسخ POB مكررة (ثقة 70%).</li>
+</ul>
+
+<h2>🔗 استنتاجات عبر الأنظمة</h2>
+<ul>
+<li><strong>F1:</strong> طلب مشاركة موسوم «ضروري» في Gmail عالق بينما الملف نفسه نشط يوميًا في Drive — ثقة 98%.</li>
+<li><strong>F2:</strong> تناقض داخلي موثق: نص بريد العميل يقول «الفواتير مرفقة» وسجل الفواتير يقول إنها غير موجودة — ثقة 85%.</li>
+<li><strong>F3:</strong> فجوة نظامية: صفر أحداث تقويم مقابل عمليات يومية — ثقة 100%.</li>
+<li><strong>F4:</strong> ترحيل AWS→Frappe Cloud اكتمل ظاهريًا لكن دون توثيق في README — ثقة 60% (استنتاج غير مؤكد).</li>
+</ul>
+
+<h2>🌍 البحث الخارجي</h2>
+<ul>
+<li><strong>Fact:</strong> ERPNext v16 stable أُصدر 12 يناير 2026 بعد تأجيل للاستقرار (Frappe Forum + frappe.io + Ksolves).</li>
+<li><strong>Vendor claim:</strong> Frappe Cloud من $20/mo مشترك و$125/mo dedicated — يتطلب تحققًا من bench الخاص بك.</li>
+</ul>
+
+<h2>✅ الإجراء الأول المقترح</h2>
+<div class="callout">راجع diff الفرع <code>fix/hardcoded-seed-passwords</code> المحلي ثم اسمح بالـpush ودوّر كلمات مرور الإنتاج (~30 دقيقة)، ورد على طلبَي المشاركة (~5 دقائق).</div>
+
+<h2>❓ حدود الثقة</h2>
+<ul>
+<li>خيوط Outlook المشار إليها في سجل الفواتير خارج حساب Gmail هذا — لم تتحقق منها من المصدر.</li>
+<li>لم يُفحص production site مباشرة (خارج النطاق الآمن).</li>
+<li>عدد tool calls الدقيق غير متاح كمقياس.</li>
+</ul>
+</div>
+</main>
+
+<footer>Sources: Drive 60 files · Gmail ~65 msgs · Calendar API ×2 · GitHub deep-dive ×1 · Web ×2 independent sources — Built by Hermes Agent</footer>
+
+<script>
+const c=document.getElementById('bg'),x=c.getContext('2d');let W,H,P=[];
+function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();onresize=rs;
+for(let i=0;i<55;i++)P.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
+(function loop(){x.clearRect(0,0,W,H);
+for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+x.beginPath();x.arc(p.x,p.y,1.2,0,7);x.fillStyle='rgba(56,189,248,.5)';x.fill();}
+requestAnimationFrame(loop)})();
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+document.querySelectorAll('.tab,.panel').forEach(e=>e.classList.remove('on'));
+t.classList.add('on');document.getElementById(t.dataset.p).classList.add('on');});
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.target.dataset.done){e.target.dataset.done=1;
+let n=+e.target.dataset.n,i=0;const t=setInterval(()=>{i+=Math.max(1,Math.ceil(n/35));if(i>=n){i=n;clearInterval(t)}e.target.textContent=i},40)}}),{threshold:.5});
+document.querySelectorAll('.kpi b').forEach(el=>co.observe(el));
+</script>
+</body>
+</html>
