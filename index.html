@@ -23,6 +23,14 @@ h1 span{background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);-webkit-backgr
 .btn-p:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(56,189,248,.35)}
 .btn-s{border:1px solid rgba(255,255,255,.2);color:#e8ecf4}
 .btn-s:hover{border-color:#38bdf8;color:#38bdf8}
+/* Interactive links — 2026 style: animated gradient underline + glow */
+a.link{position:relative;color:#7dd3fc;text-decoration:none;font-weight:500;padding-bottom:3px;transition:.3s}
+a.link::after{content:'';position:absolute;bottom:0;right:0;width:100%;height:2px;border-radius:2px;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);background-size:200% 100%;transform:scaleX(.35);transform-origin:right;transition:transform .4s cubic-bezier(.2,.7,.2,1),background-position .6s}
+a.link:hover{color:#e8ecf4;text-shadow:0 0 18px rgba(56,189,248,.5)}
+a.link:hover::after{transform:scaleX(1);background-position:100% 0}
+/* Pill links */
+a.pill{display:inline-flex;align-items:center;gap:6px;margin:4px;padding:9px 20px;border-radius:999px;border:1px solid rgba(125,211,252,.35);color:#7dd3fc;font-size:.92rem;text-decoration:none;transition:.35s;background:rgba(56,189,248,.06)}
+a.pill:hover{background:rgba(56,189,248,.15);border-color:#38bdf8;box-shadow:0 0 22px rgba(56,189,248,.3);transform:translateY(-2px)}
 section{position:relative;z-index:2;padding:90px 8vw;opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.2,.7,.2,1)}
 section.show{opacity:1;transform:none}
 h2{font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:14px}
@@ -56,7 +64,7 @@ footer{z-index:2;position:relative;text-align:center;padding:40px;color:#475569;
 <section id="services">
 <h2>ما <em>أبنيه</em></h2>
 <div class="grid">
-<div class="card reveal"><h3>⚙️ تطوير ERPNext / Frappe</h3><p>تطبيقات مالية مخصصة، تقارير، سير عمل، ونشر على Frappe Cloud — مثل نظام DANSS Finance للعمليات الميدانية.</p></div>
+<div class="card reveal"><h3>⚙️ تطوير ERPNext / Frappe</h3><p>تطبيقات مالية مخصصة، تقارير، سير عمل، ونشر على <a class="link" href="https://frappe.io/cloud" target="_blank" rel="noopener">Frappe Cloud</a> — مثل نظام <a class="link" href="https://github.com/tar002a/danss_finance_ag_cloud" target="_blank" rel="noopener">DANSS Finance</a> للعمليات الميدانية.</p></div>
 <div class="card reveal"><h3>🤖 وكلاء ذكاء اصطناعي</h3><p>وكلاء تنفيذيون يربطون Gmail وDrive وCalendar وGitHub في صورة تشغيلية موحدة بتوصيات مدعومة بالأدلة.</p></div>
 <div class="card reveal"><h3>📊 لوحات قيادة</h3><p>Dashboards تشغيلية ومالية تجمع البيانات المتفرقة في قرار واحد قابل للتحقق.</p></div>
 <div class="card reveal"><h3>🔐 أتمتة آمنة</h3><p>سير عمل مجدول (cron)، مراقبة، وتنبيهات — بدون تدخل يدوي متكرر.</p></div>
@@ -75,7 +83,15 @@ footer{z-index:2;position:relative;text-align:center;padding:40px;color:#475569;
 <section id="contact" style="text-align:center">
 <h2>جاهز <em>لنبدأ؟</em></h2>
 <p class="sub" style="margin:16px auto 0">راسلني لمناقشة مشروعك القادم.</p>
-<div class="cta" style="justify-content:center"><a class="btn btn-p" href="mailto:tttarek93@gmail.com">تواصل الآن</a></div>
+<div class="cta" style="justify-content:center;flex-wrap:wrap">
+<a class="btn btn-p" href="mailto:tttarek93@gmail.com">تواصل الآن</a>
+</div>
+<div style="margin-top:34px;display:flex;flex-wrap:wrap;justify-content:center">
+<a class="pill" href="https://github.com/tar002a/danss_finance_ag_cloud" target="_blank" rel="noopener">⚙️ DANSS Finance AG</a>
+<a class="pill" href="https://github.com/tar002a" target="_blank" rel="noopener">🐙 GitHub</a>
+<a class="pill" href="https://tar002a.github.io/tarek-site/" target="_blank" rel="noopener">🌐 هذا الموقع</a>
+<a class="pill" href="mailto:tttarek93@gmail.com">✉️ tttarek93@gmail.com</a>
+</div>
 </section>
 
 <footer>© 2026 Tarek Kayyali — Built with Hermes Agent</footer>
